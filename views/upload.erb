@@ -1,0 +1,12 @@
+<html>
+    <title>Upload photo</title>
+    <head>Upload</head>
+    <body>
+        Host = <%= host %>
+
+        <form action="http://<%= host %>:9393/upload" method="POST" enctype="multipart/form-data">
+            <input type="file", name="file">
+            <br>
+            <input type="submit" value="upload">
+    </body>
+</html>

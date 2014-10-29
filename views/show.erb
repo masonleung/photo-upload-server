@@ -1,0 +1,43 @@
+<html>
+<head>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div id="score">checking photo</div>
+
+    <script type='text/javascript'>
+    var counter = 0
+    var file_name = "<%= file_name %>"
+    var auto_refresh = setInterval(
+        function()
+        {
+            message = $( '#score' ).text()
+            if (counter > 50) {
+                $( "#score" ).html(file_name + ' not found')
+                return
+            } else if (message.indexOf("checking photo") >= 0) {
+                $( "#score").html(message + '.')
+                counter++
+            }
+        }, 1000
+    );
+
+    (function() {
+        var api = 'http://<%=host%>:9393/quality/jpeg/' + file_name
+        console.log(api)
+        $.get( api, function(data, status) {
+            console.log(status)
+            if (status == 'success') {
+                console.log('success')
+                $( "#score" ).html("name = " + data.name + ", quality = " + data.quality + ", x size = " + data.x_size + ", y size = " + data.y_size + ", x resolution = " + data.x_resolution + ", y resolution = " + data.y_resolution )
+            } else {
+                $( "#score" ).html(file_name + " not processed or existed")
+            }
+        })
+    })();
+
+    </script>
+
+</body>
+</html>
