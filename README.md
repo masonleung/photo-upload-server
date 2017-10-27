@@ -60,22 +60,22 @@ The uploaded photo is renamed from **photo.jpg** to **'epoch_time'_photo.jpg** t
         rake utils:photo_processor
 
 ## Issues encountered/lessons learned
-###Don't pick a technology by hype
+### Don't pick a technology by hype
 I debated whether to use **ruby-vips** or **rmagick** to process photo.  From researching, the **ruby-vips** gem was supposed to be more lightweighted and no memory leak.  However, I found very little documentation about this gem.  After fiddling a few hours trying to get the photo metadata, I switched to **rmagick**.  It was much easier to use, the documentation and exmples were abundant.
 
-###Raking it in
+### Raking it in
 The photo processor was not tied into the application and I tried to figure out how to load the model and queue.  I wanted to avoid doing **require** everywhere.  As I was doing the db migration, why not set up the photo processor as a rake task.  It simplies the dependency I have to bring in and **rake -T** lets me put a description about the task
 
-###Separation of view and data
+### Separation of view and data
 The **/quality/jpeg/:image_name** returns 204 **(nocontent)** when the requested image does not existed or has not been or failed to process.  I thought about returning 200 with an error message in json blob, but returning 204 is more appropriate and the frontend template can display error message accordingly
 
-###JQuery is your friend
+### JQuery is your friend
 I have not used jQuery before and found it surprizingly useful.  The documentation was very clear, there are a lot of examples.  It makes the AJAX request much easier to deal with than expected
 
-###Make user feel in control
+### Make user feel in control
 The page after a photo is uploaded display current status.  It adds a **.** to the end of the message until the AJAX call is done and times out after 50 seconds.  This gives user an indicator that the photo is being processed and works are being done while waiting
 
-##Photo quality calculation
+## Photo quality calculation
 ### Methods implemented
 #### Grid sampling (Preferred)
 Divide the image into a 10x10 grid and look at the color level in each grid.  Sum the color level and do logarithmic on the number for normalization.  The idea is to identify photo with more colors.  The caveat of this approach is coming up with a normalized scale which I have not figured out yet.  Regardless, this method is better than the other I have tried.  See the **preferred method** section on why it is selected
